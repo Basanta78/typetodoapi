@@ -87,14 +87,14 @@ router.delete('/:id',(req: Request, res: Response, next: NextFunction): void => 
     .catch((error: {}) => next(error));
 });
 
-router.post('/:id/todo', (req: Request, res: Response, next: NextFunction):void => {
+router.post('/:id/todo', ensureToken, (req: Request, res: Response, next: NextFunction):void => {
   todoService
     .createTodo(req.params.id,req.body)
     .then((data: {} )=> res.json({ data }))
     .catch((err: any) => next(err));
 });
 
-router.get('/:id/todo',ensureToken,(req: Request, res: Response, next: NextFunction):void => {
+router.get('/:id/todo', ensureToken,(req: Request, res: Response, next: NextFunction):void => {
   console.log()
   if(req.query){
 
@@ -110,14 +110,14 @@ router.get('/:id/todo',ensureToken,(req: Request, res: Response, next: NextFunct
       .catch((err: any) => next(err));
   }
 });
-router.get('/:id/todo/:pageNo', (req: Request, res: Response, next: NextFunction):void => {
+router.get('/:id/todo/:pageNo', ensureToken, (req: Request, res: Response, next: NextFunction):void => {
   todoService
     .getUserPageTodo(req.params.id, req.params.pageNo)
     .then((data: {}) => res.json({ data }))
     .catch((err: any) => next(err));
 });
 
-router.put('/:id/todo/:todoId', (req: Request, res: Response, next: NextFunction):void => {
+router.put('/:id/todo/:todoId', ensureToken, (req: Request, res: Response, next: NextFunction):void => {
     todoService
       .updateTodo(req.params.todoId, req.body)
       .then((data:{}) => res.json({ data }))
@@ -125,7 +125,7 @@ router.put('/:id/todo/:todoId', (req: Request, res: Response, next: NextFunction
   }
 );
       
-router.delete('/:id/todo/:todoId', (req: Request, res: Response, next: NextFunction):void  => {
+router.delete('/:id/todo/:todoId', ensureToken, (req: Request, res: Response, next: NextFunction):void  => {
   todoService
     .deleteTodo(req.params.todoId)
     .then((data:{}) => res.json({ message: 'delete success', data }))

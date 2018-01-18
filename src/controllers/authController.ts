@@ -2,6 +2,8 @@ import { Router } from 'express';
 import * as HTTPStatus from 'http-status-codes';
 import * as userService from '../services/userService';
 import { Request, Response, NextFunction } from 'express';
+import { verifyRefreshToken, generateAccessToken } from '../utils/jwt';
+
 
 let router = Router();
 
@@ -26,12 +28,11 @@ router.post('/login', (req: Request, res: Response, next: NextFunction): void =>
     .catch(err => next(err));
 });
 
-router.delete('/logout', (req: Request, res: Response, next: NextFunction): void=> {
+router.delete('/logout', (req: Request, res: Response, next: NextFunction): void => {
   const bearerHeader: string = String(req.headers['authorization']);
   if (typeof bearerHeader !== 'undefined') {
     const bearer = bearerHeader.split(' ');
     const refreshToken = bearer[1];
-  // let authorizationString  = String(req.headers.authorization.substring(7));
   userService
     .deleteUser(refreshToken)
     .then(data =>
@@ -45,5 +46,29 @@ else {
   res.sendStatus(400);
 }
 });
+router.get('/refresh', ensureToken, (req: IRequest, res: Response, next: NextFunction): void => {
+    try {
+      userService.validateRefreshToken(String(req.token));
+      let decoded = verifyRefreshToken(String(req.token));
+      res.json({accessToken:generateAccessToken(decoded)});
+      
+    } catch (err) {
+      res.sendStatus(403);
+    }
+});
+interface IRequest extends Request {
+  token?: string;
+}
+function ensureToken(req: IRequest, res: Response, next: NextFunction): void{
+  const bearerHeader = String(req.headers['authorization']);
+  if (typeof bearerHeader !== 'undefined') {
+    const bearer = bearerHeader.split(' ');
+    const bearerToken = bearer[1];
+    req.token = bearerToken;
+    next();
+  } else {
+    res.sendStatus(403);
+  }
+}
 
 export default router;

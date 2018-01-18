@@ -158,3 +158,18 @@ export function deleteUser(token:string):Bluebird<any> {
     throw error;
   }
 }
+export async function verifyUser(token:string) {
+  return await jwt.verifyAccessToken(token);
+}
+
+export function validateRefreshToken(token: string): Bluebird<Token> {
+  return new Token({ token })
+    .fetch()
+    .then(token => {
+      if (!token) {
+        throw Boom.notFound('Token not found');
+      }
+
+      return token;
+    });
+}
