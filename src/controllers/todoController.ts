@@ -20,11 +20,4 @@ router.get('/',(req: Request, res: Response, next: NextFunction): void => {
     .catch((error: {}) => next(error));
 });
 
-router.post('/',(req: Request, res: Response, next: NextFunction):void => {
-  todoService
-    .createTodo(req.param.id,req.body)
-    .then(data => res.json({ data }))
-    .catch(err => next(err));
-});
-
 export default router;

@@ -1,14 +1,14 @@
-import Tags from './tags';
 import User from './user';
 import bookshelf from '../config/db';
 import * as Bookshelf from 'bookshelf';
 
-const TABLE_NAME = 'todo';
+const TABLE_NAME = 'tokens';
+
 
 /**
- * Todo model.
+ * Tokens model.
  */
-class Todo extends bookshelf.Model<Todo> {
+class Tokens extends bookshelf.Model<Tokens> {
   get tableName() {
     return TABLE_NAME;
   }
@@ -16,12 +16,9 @@ class Todo extends bookshelf.Model<Todo> {
   get hasTimestamps() {
     return true;
   }
-  user(): Bookshelf.Model<User> {
+  user():Bookshelf.Model<User> {
     return this.belongsTo(User);
-  }
-  tags(): Bookshelf.Collection<Tags> {
-    return this.belongsToMany(Tags);
   }
 }
 
-export default Todo;
+export default Tokens;

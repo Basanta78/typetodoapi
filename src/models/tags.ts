@@ -1,14 +1,14 @@
 import Todo from './todo';
-import Token from './token';
 import bookshelf from '../config/db';
 import * as Bookshelf from 'bookshelf';
 
-const TABLE_NAME = 'users';
-// 
+
+const TABLE_NAME = 'tags';
+
 /**
- * Users model.
+ * User model.
  */
-class User extends bookshelf.Model<User> {
+class Tags extends bookshelf.Model<Tags> {
   get tableName() {
     return TABLE_NAME;
   }
@@ -17,12 +17,8 @@ class User extends bookshelf.Model<User> {
     return true;
   }
   todo():Bookshelf.Collection<Todo> {
-    return this.hasMany(Todo);
-  }
-  token(): Bookshelf.Model<Token> {
-    return this.hasOne(Token);
+    return this.belongsToMany(Todo);
   }
 }
 
-export default User;
-
+export default Tags;
