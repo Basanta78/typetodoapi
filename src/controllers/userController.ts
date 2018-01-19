@@ -1,14 +1,19 @@
 import { request } from 'http';
 import { Router } from 'express';
 import * as jwt from '../utils/jwt';
-import todoController from './todoController';
 import * as HTTPStatus from 'http-status-codes';
 import * as userService from '../services/userService';
 import * as todoService from '../services/todoService';
 import { Request, Response, NextFunction } from 'express';
 
 const router = Router();
-// router.use('/todo', todoController)
+/**
+ * Verify Token
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {NextFunction} next 
+ */
 function ensureToken(req: Request, res: Response, next: NextFunction): void {
   const bearerHeader: string = String(req.headers['authorization']);
   if (typeof bearerHeader !== 'undefined') {
@@ -86,7 +91,14 @@ router.delete('/:id',(req: Request, res: Response, next: NextFunction): void => 
     .then((result: {}) => res.status(HTTPStatus.OK).json(result))
     .catch((error: {}) => next(error));
 });
-
+/**
+ * Post user todo
+ *
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {NextFunction} next
+ * @returns void
+ */
 router.post('/:id/todo', ensureToken, (req: Request, res: Response, next: NextFunction):void => {
   todoService
     .createTodo(req.params.id,req.body)
@@ -94,8 +106,15 @@ router.post('/:id/todo', ensureToken, (req: Request, res: Response, next: NextFu
     .catch((err: any) => next(err));
 });
 
+/**
+ * Get user todo
+ *
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {NextFunction} next
+ * @returns void
+ */
 router.get('/:id/todo', ensureToken,(req: Request, res: Response, next: NextFunction):void => {
-  console.log()
   if(req.query){
 
     todoService
@@ -110,6 +129,14 @@ router.get('/:id/todo', ensureToken,(req: Request, res: Response, next: NextFunc
       .catch((err: any) => next(err));
   }
 });
+/**
+ * Get list of user with pagination
+ *
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {NextFunction} next
+ * @returns void
+ */
 router.get('/:id/todo/:pageNo', ensureToken, (req: Request, res: Response, next: NextFunction):void => {
   todoService
     .getUserPageTodo(req.params.id, req.params.pageNo)
@@ -117,6 +144,14 @@ router.get('/:id/todo/:pageNo', ensureToken, (req: Request, res: Response, next:
     .catch((err: any) => next(err));
 });
 
+/**
+ * Update user todo
+ *
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {NextFunction} next
+ * @returns void
+ */
 router.put('/:id/todo/:todoId', ensureToken, (req: Request, res: Response, next: NextFunction):void => {
     todoService
       .updateTodo(req.params.todoId, req.body)
@@ -124,7 +159,15 @@ router.put('/:id/todo/:todoId', ensureToken, (req: Request, res: Response, next:
       .catch((err:any) => next(err));
   }
 );
-      
+
+/**
+ * Delete todo
+ * 
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {NextFunction} next
+ * @returns void
+ */
 router.delete('/:id/todo/:todoId', ensureToken, (req: Request, res: Response, next: NextFunction):void  => {
   todoService
     .deleteTodo(req.params.todoId)

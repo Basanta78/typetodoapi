@@ -11,10 +11,11 @@ import UpdateBody from '../domain/UpdateBody';
 import RegisterBody from '../domain/RegisterBody';
 
 /**
- * Create user
- *
- * @param  {RegisterBody} body
- * @returns {Bluebird}
+ * Create User
+ * 
+ * @export
+ * @param {RegisterBody} user 
+ * @returns {Bluebird<{}>} 
  */
 export function createUser(user: RegisterBody): Bluebird<{}> {
   return new User({
@@ -28,11 +29,13 @@ export function createUser(user: RegisterBody): Bluebird<{}> {
 }
 
 /**
- * Fetch user by id
- *
- * @param  {number} id
+ * Find User By Id
+ * 
+ * @export
+ * @param {number} id 
+ * @returns Bluebird
  */
-export function findById(id: number) {
+export function findById(id: number): Bluebird<{}> {
   return new User({id})
   .fetch()
   .then((user: {}) => {
@@ -44,38 +47,24 @@ export function findById(id: number) {
   });
 }
 
-/**
- * Fetch user by email
- *
- * @param  {string} email
- */
-// export function findByEmail(email: string) {
-//   return knex('users')
-//     .where('email', '=', email)
-//     .first()
-//     .then((user: {}) => {
-//       if (!user) {
-//         throw Boom.notFound(lang.userNotFound);
-//       }
-
-//       return { data: user };
-//     });
-// }
 
 /**
- * Fetch all user
- *
- * @returns Promise
+ * Fetch All Users
+ * 
+ * @export
+ * @returns {Bluebird<{}>} 
  */
 export function fetchAll(): Bluebird<{}> {
   return User.fetchAll();
 }
 
 /**
- * Update specific user
- *
- * @param  {UpdateBody} body
- * @returns {Bluebird}
+ * Update User
+ * 
+ * @export
+ * @param {number} id 
+ * @param {string} name 
+ * @returns {Bluebird<{}>} 
  */
 export function update(id: number, name: string): Bluebird<{}> {
   return new User({ id })
@@ -85,10 +74,11 @@ export function update(id: number, name: string): Bluebird<{}> {
 }
 
 /**
- * Remove specific user
- *
- * @param  {number} id
- * @returns {Bluebird}
+ * Delete User
+ * 
+ * @export
+ * @param {number} id 
+ * @returns {Bluebird<{}>} 
  */
 export function removeUserById(id: number): Bluebird<{}> {
   return new User({ id })
@@ -96,6 +86,7 @@ export function removeUserById(id: number): Bluebird<{}> {
     .then(token => token.destroy())
     .catch ((err: any) => err); 
 }
+
 interface IloginOutput {
   user: {}
   token:{
@@ -103,7 +94,13 @@ interface IloginOutput {
     refresh:string
   }
 }
-
+/**
+ * Login User
+ * 
+ * @export
+ * @param {Ilogin} user 
+ * @returns {Bluebird<IloginOutput>} 
+ */
 export async function loginUser(user:Ilogin): Bluebird<IloginOutput>{
   try {
     let validUser = await validateUser(user);
@@ -124,6 +121,13 @@ export async function loginUser(user:Ilogin): Bluebird<IloginOutput>{
     throw err;
   }
 }
+/**
+ * Validate User With Given User Credentials
+ * 
+ * @export
+ * @param {Ilogin} user 
+ * @returns {Bluebird<any>} 
+ */
 export async function validateUser(user:Ilogin): Bluebird<any> {
   try {
     let users = await getUserByEmail(user.email);
@@ -136,7 +140,13 @@ export async function validateUser(user:Ilogin): Bluebird<any> {
     throw err;
   }
 }
-
+/**
+ * Get User By Given Email
+ * 
+ * @export
+ * @param {string} email 
+ * @returns {Bluebird<any>} 
+ */
 export function getUserByEmail(email:string): Bluebird<any> {
   let user = new User({ email }).fetch();
   return user.then((user: {}) => {
@@ -147,7 +157,13 @@ export function getUserByEmail(email:string): Bluebird<any> {
     return user;
   });
 }
-
+/**
+ * Delete User
+ * 
+ * @export
+ * @param {string} token 
+ * @returns {Bluebird<any>} 
+ */
 export function deleteUser(token:string):Bluebird<any> {
   try {
     jwt.verifyRefreshToken(token);
@@ -158,10 +174,23 @@ export function deleteUser(token:string):Bluebird<any> {
     throw error;
   }
 }
+/**
+ * Verify User
+ * 
+ * @export
+ * @param {string} token 
+ * @returns {string}
+ */
 export async function verifyUser(token:string) {
   return await jwt.verifyAccessToken(token);
 }
-
+/**
+ * Validate Refresh Token
+ * 
+ * @export
+ * @param {string} token 
+ * @returns {Bluebird<Token>} 
+ */
 export function validateRefreshToken(token: string): Bluebird<Token> {
   return new Token({ token })
     .fetch()

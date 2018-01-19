@@ -7,11 +7,14 @@ import { Model } from 'bookshelf';
 import * as Bluebird from 'bluebird';
 import * as Bookshelf from 'bookshelf';
 import TodoBody from '../domain/TodoBody';
+
 /**
- * Create user
- *
- * @param  {RegisterBody} body
- * @returns Bluebird
+ * Create Todo
+ * 
+ * @export
+ * @param {number} userId 
+ * @param {TodoBody} todo 
+ * @returns {Bluebird<{}>} 
  */
 export function createTodo(userId:number,todo: TodoBody): Bluebird<{}> {
   let tags = [...todo.tags];
@@ -28,11 +31,17 @@ export function createTodo(userId:number,todo: TodoBody): Bluebird<{}> {
     })
     .catch((err:any) => err);
 }
-
+/**
+ * Get User Todo
+ * 
+ * @export
+ * @param {number} id 
+ * @returns {Bluebird<{}>} 
+ */
 export function getUserTodo(id:number): Bluebird<{}> {
   const model:Bookshelf.Model<Todo> = new Todo();
   return model.query({ where: { user_id: id} })
-  .fetchPage({ pageSize: 5, withRelated: ['tags'] })
+  .fetchPage({ pageSize: 5, withRelated: ['tags'] })  // fetchPage not declared
   .then((todos: any) =>{ 
   return {
     Todos: todos.models,
@@ -43,11 +52,18 @@ export function getUserTodo(id:number): Bluebird<{}> {
   };
   })
 };
-
+/**
+ * Get User Paginate Todo
+ * 
+ * @export
+ * @param {number} id 
+ * @param {number} pageNo 
+ * @returns {Bluebird<{}>} 
+ */
 export function getUserPageTodo(id: number, pageNo: number): Bluebird<{}> {
   const model:Bookshelf.Model<Todo> = new Todo();
   return model.query({ where: { user_id: id} })
-  .fetchPage({ pageSize: 5,page:pageNo, withRelated: ['tags'] })
+  .fetchPage({ pageSize: 5,page:pageNo, withRelated: ['tags'] }) // fetchPage not declared
   .then((todos: any) =>{ 
   return {
     Todos: todos.models,
@@ -58,13 +74,27 @@ export function getUserPageTodo(id: number, pageNo: number): Bluebird<{}> {
   };
   })
 };
-
+/**
+ * Update Todo
+ * 
+ * @export
+ * @param {number} id 
+ * @param {TodoBody} todos 
+ * @returns {Bluebird<{}>} 
+ */
 export function updateTodo(id: number, todos:TodoBody): Bluebird<{}> {
   return new Todo({ id })
     .save({ task: todos.task, details: todos.details })
     .then((todos:{}) => todos);
 }
-
+/**
+ * Search Todo and Details
+ * 
+ * @export
+ * @param {number} id 
+ * @param {string} search 
+ * @returns {Bluebird<{}>} 
+ */
 export function searchText(id:number, search:string): Bluebird<{}> {
   const model:Bookshelf.Model<Todo> = new Todo();
   return (
@@ -86,8 +116,14 @@ export function searchText(id:number, search:string): Bluebird<{}> {
       })
   );
 }
-
-export function deleteTodo(id:number) {
+/**
+ * Delete Dodo
+ * 
+ * @export
+ * @param {number} id 
+ * @returns Bluebird
+ */
+export function deleteTodo(id:number):Bluebird<any> {
   return new Todo({ id }).fetch().then((todos:{}) => todos.destroy());
 }
 

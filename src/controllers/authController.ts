@@ -21,6 +21,13 @@ router.post('/register',(req: Request, res: Response, next: NextFunction): void 
     .catch((error: {}) => next(error));
 });
 
+/**
+ * Login user
+ *
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {NextFunction} next
+ */
 router.post('/login', (req: Request, res: Response, next: NextFunction): void => {
   userService
     .loginUser(req.body)
@@ -28,6 +35,13 @@ router.post('/login', (req: Request, res: Response, next: NextFunction): void =>
     .catch(err => next(err));
 });
 
+/**
+ * Delete user
+ *
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {NextFunction} next
+ */
 router.delete('/logout', (req: Request, res: Response, next: NextFunction): void => {
   const bearerHeader: string = String(req.headers['authorization']);
   if (typeof bearerHeader !== 'undefined') {
@@ -35,17 +49,25 @@ router.delete('/logout', (req: Request, res: Response, next: NextFunction): void
     const refreshToken = bearer[1];
   userService
     .deleteUser(refreshToken)
-    .then(data =>
+    .then((data:{}) =>
       res
         .status(HTTPStatus.OK)
         .json({ message: 'Successfully logged out', data })
     )
-    .catch(err => next(err))
+    .catch((err: any) => next(err))
 }
 else {
   res.sendStatus(400);
 }
 });
+
+/**
+ * Get AccessToken
+ *
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {NextFunction} next
+ */
 router.get('/refresh', ensureToken, (req: IRequest, res: Response, next: NextFunction): void => {
     try {
       userService.validateRefreshToken(String(req.token));
@@ -56,9 +78,18 @@ router.get('/refresh', ensureToken, (req: IRequest, res: Response, next: NextFun
       res.sendStatus(403);
     }
 });
+
+
 interface IRequest extends Request {
   token?: string;
 }
+/**
+ * Get Token
+ * 
+ * @param {IRequest} req 
+ * @param {Response} res 
+ * @param {NextFunction} next 
+ */
 function ensureToken(req: IRequest, res: Response, next: NextFunction): void{
   const bearerHeader = String(req.headers['authorization']);
   if (typeof bearerHeader !== 'undefined') {
