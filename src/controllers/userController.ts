@@ -9,22 +9,21 @@ import { Request, Response, NextFunction } from 'express';
 const router = Router();
 /**
  * Verify Token
- * 
- * @param {Request} req 
- * @param {Response} res 
- * @param {NextFunction} next 
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
  */
 function ensureToken(req: Request, res: Response, next: NextFunction): void {
-  const bearerHeader: string = String(req.headers['authorization']);
+  const bearerHeader: string = String(req.headers.authorization);
   if (typeof bearerHeader !== 'undefined') {
-    const bearer:string[] = bearerHeader.split(' ');
-    const bearerToken:string = bearer[1];
+    const bearer: string[] = bearerHeader.split(' ');
+    const bearerToken: string = bearer[1];
     // req.token = bearerToken;
     try {
       jwt.verifyAccessToken(bearerToken);
       next();
-    } 
-    catch (err){
+    } catch (err) {
       res.sendStatus(401);
     }
   } else {
@@ -39,7 +38,7 @@ function ensureToken(req: Request, res: Response, next: NextFunction): void {
  * @param  {NextFunction} next
  * @returns void
  */
-router.get('/',(req: Request, res: Response, next: NextFunction): void => {
+router.get('/', (req: Request, res: Response, next: NextFunction): void => {
   userService
     .fetchAll()
     .then((result: {}) => res.status(HTTPStatus.OK).json(result))
@@ -54,7 +53,7 @@ router.get('/',(req: Request, res: Response, next: NextFunction): void => {
  * @param  {NextFunction} next
  * @returns void
  */
-router.get('/:id',(req: Request, res: Response, next: NextFunction): void => {
+router.get('/:id', (req: Request, res: Response, next: NextFunction): void => {
   userService
     .findById(req.params.id)
     .then((result = {}) => res.status(HTTPStatus.OK).json(result))
@@ -69,10 +68,10 @@ router.get('/:id',(req: Request, res: Response, next: NextFunction): void => {
  * @param  {NextFunction} next
  * @returns void
  */
-router.put('/:id',(req: Request, res: Response, next: NextFunction): void => {
+router.put('/:id', (req: Request, res: Response, next: NextFunction): void => {
   req.body.id = req.params.id;
   userService
-    .update(req.params.id,req.body)
+    .update(req.params.id, req.body)
     .then((result: {}) => res.status(HTTPStatus.OK).json(result))
     .catch((error: {}) => next(error));
 });
@@ -85,7 +84,7 @@ router.put('/:id',(req: Request, res: Response, next: NextFunction): void => {
  * @param  {NextFunction} next
  * @returns void
  */
-router.delete('/:id',(req: Request, res: Response, next: NextFunction): void => {
+router.delete('/:id', (req: Request, res: Response, next: NextFunction): void => {
   userService
     .removeUserById(req.params.id)
     .then((result: {}) => res.status(HTTPStatus.OK).json(result))
@@ -99,10 +98,10 @@ router.delete('/:id',(req: Request, res: Response, next: NextFunction): void => 
  * @param  {NextFunction} next
  * @returns void
  */
-router.post('/:id/todo', ensureToken, (req: Request, res: Response, next: NextFunction):void => {
+router.post('/:id/todo', ensureToken, (req: Request, res: Response, next: NextFunction): void => {
   todoService
-    .createTodo(req.params.id,req.body)
-    .then((data: {} )=> res.json({ data }))
+    .createTodo(req.params.id, req.body)
+    .then((data: {} ) => res.json({ data }))
     .catch((err: any) => next(err));
 });
 
@@ -114,18 +113,17 @@ router.post('/:id/todo', ensureToken, (req: Request, res: Response, next: NextFu
  * @param  {NextFunction} next
  * @returns void
  */
-router.get('/:id/todo', ensureToken,(req: Request, res: Response, next: NextFunction):void => {
-  if(req.query){
+router.get('/:id/todo', ensureToken, (req: Request, res: Response, next: NextFunction): void => {
+  if (req.query) {
 
     todoService
     .getUserTodo(req.params.id)
     .then((data: {}) => res.json({ data }))
     .catch((err: any) => next(err));
-  }
-  else{
+  } else {
     todoService
       .searchText(req.params.id, req.query.search)
-      .then((data:{}) => res.json({ data }))
+      .then((data: {}) => res.json({ data }))
       .catch((err: any) => next(err));
   }
 });
@@ -137,7 +135,7 @@ router.get('/:id/todo', ensureToken,(req: Request, res: Response, next: NextFunc
  * @param  {NextFunction} next
  * @returns void
  */
-router.get('/:id/todo/:pageNo', ensureToken, (req: Request, res: Response, next: NextFunction):void => {
+router.get('/:id/todo/:pageNo', ensureToken, (req: Request, res: Response, next: NextFunction): void => {
   todoService
     .getUserPageTodo(req.params.id, req.params.pageNo)
     .then((data: {}) => res.json({ data }))
@@ -152,27 +150,27 @@ router.get('/:id/todo/:pageNo', ensureToken, (req: Request, res: Response, next:
  * @param  {NextFunction} next
  * @returns void
  */
-router.put('/:id/todo/:todoId', ensureToken, (req: Request, res: Response, next: NextFunction):void => {
+router.put('/:id/todo/:todoId', ensureToken, (req: Request, res: Response, next: NextFunction): void => {
     todoService
       .updateTodo(req.params.todoId, req.body)
-      .then((data:{}) => res.json({ data }))
-      .catch((err:any) => next(err));
+      .then((data: {}) => res.json({ data }))
+      .catch((err: any) => next(err));
   }
 );
 
 /**
  * Delete todo
- * 
+ *
  * @param  {Request} req
  * @param  {Response} res
  * @param  {NextFunction} next
  * @returns void
  */
-router.delete('/:id/todo/:todoId', ensureToken, (req: Request, res: Response, next: NextFunction):void  => {
+router.delete('/:id/todo/:todoId', ensureToken, (req: Request, res: Response, next: NextFunction): void  => {
   todoService
     .deleteTodo(req.params.todoId)
-    .then((data:{}) => res.json({ message: 'delete success', data }))
-    .catch((err:any) => next(err));
+    .then((data: {}) => res.json({ message: 'delete success', data }))
+    .catch((err: any) => next(err));
 });
 
 export default router;

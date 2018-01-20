@@ -1,5 +1,4 @@
 import * as dotenv from 'dotenv';
-import { name, version } from '../../package.json';
 
 dotenv.config();
 
@@ -7,8 +6,8 @@ const isTestEnvironment = process.env.NODE_ENV === 'test';
 
 export default {
   app: {
-    name: name || 'typescript-express-api-starter',
-    version: version || '1.0.0',
+    name: 'typescript-express-api-starter',
+    version: '1.0.0',
     port: parseInt(
       isTestEnvironment
         ? process.env.TEST_APP_PORT || '8888'

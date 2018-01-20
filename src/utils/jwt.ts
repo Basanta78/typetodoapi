@@ -5,7 +5,7 @@ import * as jwt from 'jsonwebtoken';
  * @param data
  * @returns {string}
  */
-export function generateAccessToken(data:{}): string{
+export function generateAccessToken(data: {}): string {
   return jwt.sign({ encryptedData: data }, 'secret', { expiresIn: 20 });
 }
 /**
@@ -14,7 +14,7 @@ export function generateAccessToken(data:{}): string{
  * @param data
  * @returns {string}
  */
-export function generateRefreshToken(data:{}): string {
+export function generateRefreshToken(data: {}): string {
   return jwt.sign({ encryptedData: data }, 'refreshsecret', {
     expiresIn: 120000
   });
@@ -24,7 +24,7 @@ export function generateRefreshToken(data:{}): string {
  * Verify access token.
  *
  */
-export function verifyAccessToken(token:string): object | string {
+export function verifyAccessToken(token: string): object | string {
   return jwt.verify(token, 'secret');
 }
 
@@ -32,6 +32,6 @@ export function verifyAccessToken(token:string): object | string {
  * Verify refresh token.
  *
  */
-export function verifyRefreshToken(token:string): object | string {
+export function verifyRefreshToken(token: string): object | string {
   return jwt.verify(token, 'refreshsecret');
 }

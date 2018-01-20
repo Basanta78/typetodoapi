@@ -16,10 +16,10 @@ class Todo extends bookshelf.Model<Todo> {
   get hasTimestamps() {
     return true;
   }
-  user(): Bookshelf.Model<User> {
+  public user(): Bookshelf.Model<User> {
     return this.belongsTo(User);
   }
-  tags(): Bookshelf.Collection<Tags> {
+  public tags(): Bookshelf.Collection<Tags> {
     return this.belongsToMany(Tags);
   }
 }

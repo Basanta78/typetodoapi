@@ -1,6 +1,6 @@
 import config from './config';
 import * as client from 'knex';
-import  * as bookshelfJs  from 'bookshelf';
+import * as bookshelfJs from 'bookshelf';
 /**
  * Database connection.
  */

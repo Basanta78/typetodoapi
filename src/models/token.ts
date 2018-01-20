@@ -4,7 +4,6 @@ import * as Bookshelf from 'bookshelf';
 
 const TABLE_NAME = 'tokens';
 
-
 /**
  * Tokens model.
  */
@@ -16,7 +15,7 @@ class Tokens extends bookshelf.Model<Tokens> {
   get hasTimestamps() {
     return true;
   }
-  user():Bookshelf.Model<User> {
+  public user(): Bookshelf.Model<User> {
     return this.belongsTo(User);
   }
 }

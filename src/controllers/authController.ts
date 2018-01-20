@@ -4,8 +4,7 @@ import * as userService from '../services/userService';
 import { Request, Response, NextFunction } from 'express';
 import { verifyRefreshToken, generateAccessToken } from '../utils/jwt';
 
-
-let router = Router();
+const router = Router();
 
 /**
  * Register user
@@ -14,7 +13,7 @@ let router = Router();
  * @param  {Response} res
  * @param  {NextFunction} next
  */
-router.post('/register',(req: Request, res: Response, next: NextFunction): void => {
+router.post('/register', (req: Request, res: Response, next: NextFunction): void => {
   userService
     .createUser(req.body)
     .then((result: {}) => res.status(HTTPStatus.CREATED).json(result))
@@ -31,7 +30,7 @@ router.post('/register',(req: Request, res: Response, next: NextFunction): void 
 router.post('/login', (req: Request, res: Response, next: NextFunction): void => {
   userService
     .loginUser(req.body)
-    .then((data:{}) =>res.status(HTTPStatus.CREATED).json({ data  }))
+    .then((data: {}) => res.status(HTTPStatus.CREATED).json({ data  }))
     .catch(err => next(err));
 });
 
@@ -43,20 +42,19 @@ router.post('/login', (req: Request, res: Response, next: NextFunction): void =>
  * @param  {NextFunction} next
  */
 router.delete('/logout', (req: Request, res: Response, next: NextFunction): void => {
-  const bearerHeader: string = String(req.headers['authorization']);
+  const bearerHeader: string = String(req.headers.authorization);
   if (typeof bearerHeader !== 'undefined') {
     const bearer = bearerHeader.split(' ');
     const refreshToken = bearer[1];
-  userService
+    userService
     .deleteUser(refreshToken)
-    .then((data:{}) =>
+    .then((data: {}) =>
       res
         .status(HTTPStatus.OK)
         .json({ message: 'Successfully logged out', data })
     )
-    .catch((err: any) => next(err))
-}
-else {
+    .catch((err: any) => next(err));
+} else {
   res.sendStatus(400);
 }
 });
@@ -68,30 +66,29 @@ else {
  * @param  {Response} res
  * @param  {NextFunction} next
  */
-router.get('/refresh', ensureToken, (req: IRequest, res: Response, next: NextFunction): void => {
+router.get('/refresh', ensureToken, (req: InRequest, res: Response, next: NextFunction): void => {
     try {
       userService.validateRefreshToken(String(req.token));
-      let decoded = verifyRefreshToken(String(req.token));
-      res.json({accessToken:generateAccessToken(decoded)});
-      
+      const decoded = verifyRefreshToken(String(req.token));
+      res.json({accessToken: generateAccessToken(decoded)});
+
     } catch (err) {
       res.sendStatus(403);
     }
 });
 
-
-interface IRequest extends Request {
+interface InRequest extends Request {
   token?: string;
 }
 /**
  * Get Token
- * 
- * @param {IRequest} req 
- * @param {Response} res 
- * @param {NextFunction} next 
+ *
+ * @param {IRequest} req
+ * @param {Response} res
+ * @param {NextFunction} next
  */
-function ensureToken(req: IRequest, res: Response, next: NextFunction): void{
-  const bearerHeader = String(req.headers['authorization']);
+function ensureToken(req: InRequest, res: Response, next: NextFunction): void {
+  const bearerHeader = String(req.headers.authorization);
   if (typeof bearerHeader !== 'undefined') {
     const bearer = bearerHeader.split(' ');
     const bearerToken = bearer[1];

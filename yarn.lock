@@ -2551,6 +2551,10 @@ media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
 
+memoize-decorator@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/memoize-decorator/-/memoize-decorator-1.0.2.tgz#605a41715c4171db192a90098b00ab8d6e1102f5"
+
 merge-descriptors@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/merge-descriptors/-/merge-descriptors-1.0.1.tgz#b00aaa556dd8b44568150ec9d1b953f3f90cbb61"
@@ -3705,6 +3709,13 @@ tslib@^1.7.1, tslib@^1.8.0:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.8.1.tgz#6946af2d1d651a7b1863b531d6e5afa41aa44eac"
 
+tslint-clean-code@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/tslint-clean-code/-/tslint-clean-code-0.2.3.tgz#52da1fcf9c29ae41253c6c3e8d3456d4b8c8f38d"
+  dependencies:
+    memoize-decorator "^1.0.2"
+    tsutils "2.7.1"
+
 tslint@^5.8.0:
   version "5.8.0"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.8.0.tgz#1f49ad5b2e77c76c3af4ddcae552ae4e3612eb13"
@@ -3720,6 +3731,12 @@ tslint@^5.8.0:
     semver "^5.3.0"
     tslib "^1.7.1"
     tsutils "^2.12.1"
+
+tsutils@2.7.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.7.1.tgz#411a0e9466525a2b2869260a55620d7292155e24"
+  dependencies:
+    tslib "^1.7.1"
 
 tsutils@^2.12.1:
   version "2.14.0"

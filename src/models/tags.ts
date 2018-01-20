@@ -2,7 +2,6 @@ import Todo from './todo';
 import bookshelf from '../config/db';
 import * as Bookshelf from 'bookshelf';
 
-
 const TABLE_NAME = 'tags';
 
 /**
@@ -16,7 +15,7 @@ class Tags extends bookshelf.Model<Tags> {
   get hasTimestamps() {
     return true;
   }
-  todo():Bookshelf.Collection<Todo> {
+  public todo(): Bookshelf.Collection<Todo> {
     return this.belongsToMany(Todo);
   }
 }

@@ -1,4 +1,4 @@
-interface TodoBody{
+interface TodoBody {
   task: string;
   details: string;
   tags: number[];
