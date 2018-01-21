@@ -86,6 +86,10 @@
   dependencies:
     "@types/express" "*"
 
+"@types/joi@^13.0.5":
+  version "13.0.5"
+  resolved "https://registry.yarnpkg.com/@types/joi/-/joi-13.0.5.tgz#50829402204e8fec8ee287eeb37d79fbff34913c"
+
 "@types/jsonwebtoken@^7.2.5":
   version "7.2.5"
   resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-7.2.5.tgz#413159d570ec45fc3e7da7ea3f7bca6fb9300e72"

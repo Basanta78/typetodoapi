@@ -5,6 +5,7 @@ import * as HTTPStatus from 'http-status-codes';
 import * as userService from '../services/userService';
 import * as todoService from '../services/todoService';
 import { Request, Response, NextFunction } from 'express';
+import { todoPostValidator, todoPutValidator } from '../validators/todoValidators';
 
 const router = Router();
 /**
@@ -98,7 +99,7 @@ router.delete('/:id', (req: Request, res: Response, next: NextFunction): void =>
  * @param  {NextFunction} next
  * @returns void
  */
-router.post('/:id/todo', ensureToken, (req: Request, res: Response, next: NextFunction): void => {
+router.post('/:id/todo', todoPostValidator, ensureToken, (req: Request, res: Response, next: NextFunction): void => {
   todoService
     .createTodo(req.params.id, req.body)
     .then((data: {} ) => res.json({ data }))
@@ -150,7 +151,8 @@ router.get('/:id/todo/:pageNo', ensureToken, (req: Request, res: Response, next:
  * @param  {NextFunction} next
  * @returns void
  */
-router.put('/:id/todo/:todoId', ensureToken, (req: Request, res: Response, next: NextFunction): void => {
+router.put('/:id/todo/:todoId', todoPutValidator, ensureToken,
+(req: Request, res: Response, next: NextFunction): void => {
     todoService
       .updateTodo(req.params.todoId, req.body)
       .then((data: {}) => res.json({ data }))

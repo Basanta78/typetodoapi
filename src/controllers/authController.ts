@@ -3,6 +3,7 @@ import * as HTTPStatus from 'http-status-codes';
 import * as userService from '../services/userService';
 import { Request, Response, NextFunction } from 'express';
 import { verifyRefreshToken, generateAccessToken } from '../utils/jwt';
+import { userLoginValidator, userRegisterValidator } from '../validators/userValidator';
 
 const router = Router();
 
@@ -13,7 +14,7 @@ const router = Router();
  * @param  {Response} res
  * @param  {NextFunction} next
  */
-router.post('/register', (req: Request, res: Response, next: NextFunction): void => {
+router.post('/register', userRegisterValidator, (req: Request, res: Response, next: NextFunction): void => {
   userService
     .createUser(req.body)
     .then((result: {}) => res.status(HTTPStatus.CREATED).json(result))
@@ -27,7 +28,7 @@ router.post('/register', (req: Request, res: Response, next: NextFunction): void
  * @param  {Response} res
  * @param  {NextFunction} next
  */
-router.post('/login', (req: Request, res: Response, next: NextFunction): void => {
+router.post('/login', userLoginValidator, (req: Request, res: Response, next: NextFunction): void => {
   userService
     .loginUser(req.body)
     .then((data: {}) => res.status(HTTPStatus.CREATED).json({ data  }))

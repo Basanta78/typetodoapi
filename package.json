@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/helmet": "^0.0.37",
+    "@types/joi": "^13.0.5",
     "@types/jsonwebtoken": "^7.2.5",
     "@types/morgan": "^1.7.35",
     "bcrypt": "^1.0.3",
